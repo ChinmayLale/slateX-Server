@@ -35,6 +35,9 @@ export const getAllDocumentsForUser = async (userId: string): Promise<Document[]
          where: {
             userId: userId,
          },
+         include: {
+            pages: true
+         }
       });
       return documents;
    } catch (err: any) {
