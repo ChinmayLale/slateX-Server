@@ -1,0 +1,31 @@
+model Page {
+   id         String    @id @default(cuid())
+   title      String
+   createdAt  DateTime  @default(now())
+   updatedAt  DateTime  @updatedAt
+   document   Document? @relation(fields: [documentId], references: [id])
+   documentId String?
+   content    Json?
+   blocks     Block[]
+}
+
+model Block {
+   id      String    @id @default(cuid())
+   type    BlockType
+   content Json
+   order   Int
+   page    Page      @relation(fields: [pageId], references: [id])
+   pageId  String
+}
+
+enum BlockType {
+   TEXT
+   HEADING
+   TODO
+   BULLET_LIST
+   NUMBERED_LIST
+   IMAGE
+   CODE
+   TABLE
+   QUOTE
+}

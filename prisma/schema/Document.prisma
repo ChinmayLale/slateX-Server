@@ -1,0 +1,10 @@
+model Document {
+   id          String   @id @default(cuid())
+   title       String
+   createdAt   DateTime @default(now())
+   updatedAt   DateTime @updatedAt
+   userId      String
+   pages       Page[]
+   isPublished Boolean  @default(false)
+   isArchived  Boolean  @default(false)
+}
