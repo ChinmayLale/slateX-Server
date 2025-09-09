@@ -43,13 +43,25 @@ export const addPageInDocument = async (documentId: string): Promise<Page | null
 }
 
 
-
-
-
 export const getPagesByDocumentId = async (documentId: string) => {
    return await prisma.page.findMany({
       where: {
          documentId: documentId,
       },
    });
+};
+
+
+
+export const updateTitleForPage = async (pageId: string, title: string): Promise<string | null> => {
+   try {
+      const page = await prisma.page.update({
+         where: { id: pageId },
+         data: { title: title },
+      });
+      return page.title; // success
+   } catch (error) {
+      console.error(error);
+      return null; // failed
+   }
 };

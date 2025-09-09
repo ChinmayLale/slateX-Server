@@ -14,7 +14,6 @@ loggers.add("default", {
    transports: [
       new transports.Console(),
       // Optional: file transport
-      new transports.File({ filename: "logs/app.log" }),
    ],
 });
 
@@ -25,9 +24,6 @@ loggers.add("errorLogger", {
       format.timestamp(),
       format.json()
    ),
-   transports: [
-      new transports.File({ filename: "logs/error.log" })
-   ]
 });
 
 export const logger = loggers.get("default");

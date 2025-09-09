@@ -7,6 +7,9 @@ model Page {
    documentId String?
    content    Json?
    blocks     Block[]
+   isArchived Boolean   @default(false)
+   coverImage String?
+   icon       String?
 }
 
 model Block {
