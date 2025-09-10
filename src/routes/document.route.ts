@@ -7,32 +7,32 @@ import { addPageToDocumentController, publishAPage, updateCoverImageForPage, upd
 const router = Router();
 
 
-router.post("/create", requireAuth(), createNewDocument);
+router.post("/create", createNewDocument);
 
 
-router.post("/add-page", requireAuth(), addPageToDocumentController);
-router.get("/", requireAuth(), getAllDocuments);
+router.post("/add-page", addPageToDocumentController);
+router.get("/",  getAllDocuments);
 
-router.delete("/", requireAuth(), ArchiveDocument);
+router.delete("/",  ArchiveDocument);
 
-router.get("/trash", requireAuth(), getAllTrashDocuments);
+router.get("/trash",  getAllTrashDocuments);
 
-router.put('/', requireAuth(), UndoArchiveDocument);
+router.put('/',  UndoArchiveDocument);
 
-router.post('/rename', requireAuth(), renameDocument)
+router.post('/rename', renameDocument)
 
-router.delete("/permanent", requireAuth(), DeleteDocumentPermenently);
-
-
-router.post("/page/update-title", requireAuth(), updatePageTitleController);
-
-router.post('/page/update-cover-image', requireAuth(), updateCoverImageForPage);
+router.delete("/permanent", DeleteDocumentPermenently);
 
 
-router.post("/page/publish", requireAuth(), publishAPage);
+router.post("/page/update-title",  updatePageTitleController);
+
+router.post('/page/update-cover-image',  updateCoverImageForPage);
 
 
-router.post('/page/update-content', requireAuth(), updatePageContent);
+router.post("/page/publish",  publishAPage);
+
+
+router.post('/page/update-content',  updatePageContent);
 
 
 
