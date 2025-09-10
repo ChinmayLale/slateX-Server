@@ -8,8 +8,8 @@ import { ArchiveDocumentById, createNewDoc, DeleteDocumentById, getAllDocumentsF
 
 const createNewDocument = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
-      const { title } = req.body
+
+      const { title  , userId} = req.body
       if (!userId) {
          return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
       }
@@ -31,8 +31,8 @@ const createNewDocument = async (req: Request, res: Response) => {
 
 const getAllDocuments = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
-      if (!userId) {
+      const { userId } = req.query
+      if (!userId || typeof userId !== "string") {
          return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
       }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
@@ -52,7 +52,7 @@ const getAllDocuments = async (req: Request, res: Response) => {
 const ArchiveDocument = async (req: Request, res: Response) => {
    try {
       const { documentId } = req.query;
-      const { userId } = getAuth(req);
+      // const { userId } = getAuth(req);
 
 
       if (!documentId || typeof documentId !== "string") {
@@ -61,18 +61,18 @@ const ArchiveDocument = async (req: Request, res: Response) => {
             .send(new ApiError(400, "Bad Request", "Document id is required"));
       }
 
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // const user = await clerkClient.users.getUser(userId);
       const document = await getDocumentById(documentId);
       if (!document) {
          return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
       }
 
-      if (document.userId !== userId) {
-         return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
-      }
+      // if (document.userId !== userId) {
+      //    return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
+      // }
 
       const updatedDocument = await ArchiveDocumentById(documentId);
       if (updatedDocument === true) {
@@ -89,8 +89,8 @@ const ArchiveDocument = async (req: Request, res: Response) => {
 
 const getAllTrashDocuments = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
-      if (!userId) {
+      const { userId } = req.query
+      if (!userId || typeof userId !== "string") {
          return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
       }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
@@ -112,7 +112,7 @@ const getAllTrashDocuments = async (req: Request, res: Response) => {
 const UndoArchiveDocument = async (req: Request, res: Response) => {
    try {
       const { documentId } = req.query;
-      const { userId } = getAuth(req);
+      // const { userId } = getAuth(req);
 
 
       if (!documentId || typeof documentId !== "string") {
@@ -121,18 +121,18 @@ const UndoArchiveDocument = async (req: Request, res: Response) => {
             .send(new ApiError(400, "Bad Request", "Document id is required"));
       }
 
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // const user = await clerkClient.users.getUser(userId);
       const document = await getDocumentById(documentId);
       if (!document) {
          return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
       }
 
-      if (document.userId !== userId) {
-         return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
-      }
+      // if (document.userId !== userId) {
+      //    return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
+      // }
 
       const updatedDocument = await UndoArchiveDocumentById(documentId);
       if (updatedDocument === true) {
@@ -150,7 +150,7 @@ const UndoArchiveDocument = async (req: Request, res: Response) => {
 const DeleteDocumentPermenently = async (req: Request, res: Response) => {
    try {
       const { documentId } = req.query;
-      const { userId } = getAuth(req);
+      // const { userId } = getAuth(req);
 
       if (!documentId || typeof documentId !== "string") {
          return res
@@ -158,18 +158,18 @@ const DeleteDocumentPermenently = async (req: Request, res: Response) => {
             .send(new ApiError(400, "Bad Request", "Document id is required"));
       }
 
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // const user = await clerkClient.users.getUser(userId);
       const document = await getDocumentById(documentId);
       if (!document) {
          return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
       }
 
-      if (document.userId !== userId) {
-         return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
-      }
+      // if (document.userId !== userId) {
+      //    return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
+      // }
 
       const updatedDocument = await DeleteDocumentById(documentId);
       if (updatedDocument === true) {
@@ -188,7 +188,7 @@ const DeleteDocumentPermenently = async (req: Request, res: Response) => {
 const renameDocument = async (req: Request, res: Response) => {
    try {
       const { documentId, title } = req.body;
-      const { userId } = getAuth(req);
+      // const { userId } = getAuth(req);
 
       if (!documentId || typeof documentId !== "string") {
          return res
@@ -196,9 +196,9 @@ const renameDocument = async (req: Request, res: Response) => {
             .send(new ApiError(400, "Bad Request", "Document id is required"));
       }
 
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
 
       // const user = await clerkClient.users.getUser(userId);
       const document = await getDocumentById(documentId);
@@ -206,9 +206,9 @@ const renameDocument = async (req: Request, res: Response) => {
          return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
       }
 
-      if (document.userId !== userId) {
-         return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
-      }
+      // if (document.userId !== userId) {
+      //    return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
+      // }
 
       const updatedDocument = await updateDocumentTitle(documentId, title);
 

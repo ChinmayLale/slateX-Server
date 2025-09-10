@@ -12,11 +12,11 @@ const createNewPage = async (req: Request, res: Response) => {
    try {
       const { userId } = getAuth(req)
       const { pageName = "Untitled" } = req.body
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
-      const user = await clerkClient.users.getUser(userId);
+      // const user = await clerkClient.users.getUser(userId);
 
       return res.status(200).send(new ApiResponse(200, "Success", user))
    } catch (err: Error | any) {
@@ -27,15 +27,11 @@ const createNewPage = async (req: Request, res: Response) => {
 
 const addPageToDocumentController = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
+      // const { userId } = getAuth(req)
       const { documentId } = req.body;
       logger.info(`Document Id: ${documentId}`);
       // console.log(`Document Id: ${documentId}`);
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
-      // Use Clerk's JavaScript Backend SDK to get the user's User object
-      const user = await clerkClient.users.getUser(userId);
+      
 
       if (!documentId) {
          return res.status(400).send(new ApiError(400, "Bad Request", "Document id is required"))
@@ -58,15 +54,10 @@ const addPageToDocumentController = async (req: Request, res: Response) => {
 
 const updatePageTitleController = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
+      // const { userId } = getAuth(req)
       const { documentId, pageId, title = "Untitled Page" } = req.body;
       logger.info(`Document Id: ${documentId} & pageId : ${pageId} & title : ${title}`);
 
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
-      // Use Clerk's JavaScript Backend SDK to get the user's User object
-      const user = await clerkClient.users.getUser(userId);
 
       if (!documentId || typeof documentId !== "string" || !pageId || typeof pageId !== "string" || !title || typeof title !== "string") {
          return res.status(400).send(new ApiError(400, "Bad Request", "All fields are required"))
@@ -77,9 +68,6 @@ const updatePageTitleController = async (req: Request, res: Response) => {
          return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
       }
 
-      if (document.userId !== userId) {
-         return res.status(500).send(new ApiError(500, "Document not found For Id ", `Failed to get document for id : ${documentId}`))
-      }
 
       //check if that doc contains that page or not 
 
@@ -100,12 +88,10 @@ const updatePageTitleController = async (req: Request, res: Response) => {
 export const updateCoverImageForPage = async (req: Request, res: Response) => {
    try {
       console.log("request Recived for Updating cover Image");
-      const { userId } = getAuth(req)
+      // const { userId } = getAuth(req)
       const { pageId, coverImage } = req.body;
       console.log({ pageId, coverImage });
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+
       // Use Clerk's JavaScript Backend SDK to get the user's User object
       const page = await getPageByPageId(pageId)
       if (!page) {
@@ -126,18 +112,18 @@ export const updateCoverImageForPage = async (req: Request, res: Response) => {
 
 export const publishAPage = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
+      // const { userId } = getAuth(req)
       const { pageId } = req.body;
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
       const page = await getPageByPageId(pageId);
       if (!page) {
          return res.status(500).send(new ApiError(500, "Internal Server Error while publishing Page", "Failed to publish page"))
       }
       const published = await publishPageByPageId(pageId, page);
-      return res.status(200).send(new ApiResponse(200, "Page Published Successfully", page))
+      return res.status(200).send(new ApiResponse(200, "Page Published Successfully", published))
    } catch (error) {
       console.error(error);
       return res.status(500).send(new ApiError(500, "Internal Server Error While publishing Page")); // failed
@@ -147,13 +133,13 @@ export const publishAPage = async (req: Request, res: Response) => {
 
 export const updatePageContent = async (req: Request, res: Response) => {
    try {
-      const { userId } = getAuth(req)
+      // const { userId } = getAuth(req)
       const { pageId, pageContent } = req.body;
       console.log("Update Page Content Request Recived ");
       // console.log({pageContent, pageId});
-      if (!userId) {
-         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
-      }
+      // if (!userId) {
+      //    return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      // }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
       const page = await getPageByPageId(pageId);
       if (!page) {
