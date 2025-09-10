@@ -21,7 +21,7 @@ app.use(helmet());
 
 const allowedOrigins = [
    "http://localhost:3000",
-   "https://your-frontend-domain.com"
+   "https://slate-x.vercel.app"
 ];
 
 // 2. Enable CORS
