@@ -11,7 +11,8 @@
     "prisma:migrate": "prisma migrate dev --schema=prisma/schema",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio --schema=prisma/schema",
-    "prisma:reset": "prisma migrate reset"
+    "prisma:reset": "prisma migrate reset",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
