@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiError";
 import { ApiResponse } from "../utils/apiResponse";
 import { logger, errorLogger } from "../config/logger";
 import { clerkClient, getAuth } from '@clerk/express';
-import { addPageInDocument, updateTitleForPage } from "../services/Pages.service";
+import { addCoverImageToPage, addPageInDocument, getPageByPageId, publishPageByPageId, updateTitleForPage } from "../services/Pages.service";
 import { getDocumentById } from "../services/Document.service";
 
 
@@ -82,7 +82,7 @@ const updatePageTitleController = async (req: Request, res: Response) => {
       }
 
       //check if that doc contains that page or not 
-      
+
 
       const updatedTitle = await updateTitleForPage(pageId, title);
       if (!updatedTitle) {
@@ -95,5 +95,53 @@ const updatePageTitleController = async (req: Request, res: Response) => {
    }
 }
 
+
+
+export const updateCoverImageForPage = async (req: Request, res: Response) => {
+   try {
+      console.log("request Recived for Updating cover Image");
+      const { userId } = getAuth(req)
+      const { pageId, coverImage } = req.body;
+      console.log({ pageId, coverImage });
+      if (!userId) {
+         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      }
+      // Use Clerk's JavaScript Backend SDK to get the user's User object
+      const page = await getPageByPageId(pageId)
+      if (!page) {
+         return res.status(404).send(new ApiError(404, "Page not found", "Page not found"))
+      }
+      const updatedCoverImage = await addCoverImageToPage(pageId, coverImage);
+      if (updatedCoverImage === null) {
+         return res.status(500).send(new ApiError(500, "Internal Server Error while updating Page", "Failed to update page"))
+      }
+      return res.status(200).send(new ApiResponse(200, "Cover Image Update Successfully", updatedCoverImage))
+   } catch (error) {
+      console.error(error);
+      return res.status(500).send(new ApiError(500, "Internal Server Error While Adding Cover Image")); // failed
+   }
+};
+
+
+
+export const publishAPage = async (req: Request, res: Response) => {
+   try {
+      const { userId } = getAuth(req)
+      const { pageId } = req.body;
+      if (!userId) {
+         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      }
+      // Use Clerk's JavaScript Backend SDK to get the user's User object
+      const page = await getPageByPageId(pageId);
+      if (!page) {
+         return res.status(500).send(new ApiError(500, "Internal Server Error while publishing Page", "Failed to publish page"))
+      }
+      const published = await publishPageByPageId(pageId , page);
+      return res.status(200).send(new ApiResponse(200, "Page Published Successfully", page))
+   } catch (error) {
+      console.error(error);
+      return res.status(500).send(new ApiError(500, "Internal Server Error While publishing Page")); // failed
+   }
+};
 
 export { addPageToDocumentController, createNewPage, updatePageTitleController }

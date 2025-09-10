@@ -10,6 +10,7 @@ export const createNewUntitledPage = async (
       data: {
          title: "Untitled Page",
          documentId: documentId || null, // optional document attachment
+         icon: null
       },
    });
 
@@ -60,6 +61,51 @@ export const updateTitleForPage = async (pageId: string, title: string): Promise
          data: { title: title },
       });
       return page.title; // success
+   } catch (error) {
+      console.error(error);
+      return null; // failed
+   }
+};
+
+
+
+export const addCoverImageToPage = async (pageId: string, coverImage: string): Promise<string | null> => {
+   try {
+      const page = await prisma.page.update({
+         where: { id: pageId },
+         data: { coverImage: coverImage },
+      });
+      return page.coverImage; // success
+   } catch (error) {
+      console.error(error);
+      return null; // failed
+   }
+};
+
+
+
+export const getPageByPageId = async (pageId: string): Promise<Page | null> => {
+   try {
+      const page = await prisma.page.findUnique({
+         where: { id: pageId },
+      });
+      return page; // success
+   } catch (error) {
+      console.error(error);
+      return null; // failed
+   }
+};
+
+
+export const publishPageByPageId = async (pageId: string, currentPage: Page): Promise<Page | null> => {
+   try {
+      const page = await prisma.page.update({
+         where: { id: pageId },
+         data: {
+            isPublished: !currentPage.isPublished
+         }
+      });
+      return page; // success
    } catch (error) {
       console.error(error);
       return null; // failed

@@ -4,7 +4,7 @@ import { createNewUntitledPage } from "./Pages.service";
 import { logger } from "../config/logger";
 import { id } from "zod/v4/locales/index.cjs";
 
-export const createNewDoc = async (ownerId: string): Promise<Document | null> => {
+export const createNewDoc = async (ownerId: string, title: string): Promise<Document | null> => {
    try {
 
       const page = await createNewUntitledPage();
@@ -12,7 +12,7 @@ export const createNewDoc = async (ownerId: string): Promise<Document | null> =>
       // 2️⃣ Create the document and attach the page
       const document = await prisma.document.create({
          data: {
-            title: "Untitled Document",
+            title: title || "Untitled Document",
             userId: ownerId,
             pages: {
                connect: { id: page }, // attach the existing page
@@ -160,5 +160,26 @@ export const DeleteDocumentById = async (id: string): Promise<boolean> => {
    } catch (err: any) {
       logger.error(err.message);
       return false;
+   }
+}
+
+
+export const updateDocumentTitle = async (id: string, title: string): Promise<Document | null> => {
+   try {
+      if (!id) {
+         return null;
+      }
+      const document = await prisma.document.update({
+         where: {
+            id: id,
+         },
+         data: {
+            title: title,
+         },
+      });
+      return document;
+   } catch (err: any) {
+      logger.error(err.message);
+      return null;
    }
 }

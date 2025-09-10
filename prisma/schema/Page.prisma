@@ -1,15 +1,16 @@
 model Page {
-   id         String    @id @default(cuid())
-   title      String
-   createdAt  DateTime  @default(now())
-   updatedAt  DateTime  @updatedAt
-   document   Document? @relation(fields: [documentId], references: [id])
-   documentId String?
-   content    Json?
-   blocks     Block[]
-   isArchived Boolean   @default(false)
-   coverImage String?
-   icon       String?
+   id          String    @id @default(cuid())
+   title       String
+   createdAt   DateTime  @default(now())
+   updatedAt   DateTime  @updatedAt
+   document    Document? @relation(fields: [documentId], references: [id])
+   documentId  String?
+   content     String?
+   blocks      Block[]
+   isArchived  Boolean   @default(false)
+   coverImage  String?
+   icon        String?
+   isPublished Boolean   @default(false)
 }
 
 model Block {
