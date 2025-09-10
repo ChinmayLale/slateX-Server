@@ -90,12 +90,12 @@ const ArchiveDocument = async (req: Request, res: Response) => {
 const getAllTrashDocuments = async (req: Request, res: Response) => {
    try {
       const { userId } = req.query
-      if (!userId || typeof userId !== "string") {
+      if (!userId) {
          return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
       }
       // Use Clerk's JavaScript Backend SDK to get the user's User object
       // const user = await clerkClient.users.getUser(userId);
-      const documents = await getAllTrashDocumentsForUser(userId);
+      const documents = await getAllTrashDocumentsForUser(userId as string);
       if (!documents) {
          return res.status(500).send(new ApiError(500, "Internal Server Error while getting Documents", "Failed to get documents"))
       }

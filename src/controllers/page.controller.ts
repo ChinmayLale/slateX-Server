@@ -18,7 +18,7 @@ const createNewPage = async (req: Request, res: Response) => {
       // Use Clerk's JavaScript Backend SDK to get the user's User object
       // const user = await clerkClient.users.getUser(userId);
 
-      return res.status(200).send(new ApiResponse(200, "Success", user))
+      return res.status(200).send(new ApiResponse(200, "Success", true))
    } catch (err: Error | any) {
       errorLogger.error(err.message);
       return res.status(500).send(new ApiError(500, "Internal Server Error while creating Page", `${err.message}`))
