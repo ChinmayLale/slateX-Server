@@ -111,3 +111,17 @@ export const publishPageByPageId = async (pageId: string, currentPage: Page): Pr
       return null; // failed
    }
 };
+
+
+export const updatePageContentByPageId = async (pageId: string, pageContent: string): Promise<Page | null> => {
+   try {
+      const page = await prisma.page.update({
+         where: { id: pageId },
+         data: { content: pageContent },
+      });
+      return page; // success
+   } catch (error) {
+      console.error(error);
+      return null; // failed
+   }
+};

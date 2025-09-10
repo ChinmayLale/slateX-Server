@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ArchiveDocument, createNewDocument, DeleteDocumentPermenently, getAllDocuments, getAllTrashDocuments, renameDocument, UndoArchiveDocument } from "../controllers/document.controller";
 import { requireAuth } from "@clerk/express";
-import { addPageToDocumentController, publishAPage, updateCoverImageForPage, updatePageTitleController } from "../controllers/page.controller";
+import { addPageToDocumentController, publishAPage, updateCoverImageForPage, updatePageContent, updatePageTitleController } from "../controllers/page.controller";
 
 
 const router = Router();
@@ -30,6 +30,12 @@ router.post('/page/update-cover-image', requireAuth(), updateCoverImageForPage);
 
 
 router.post("/page/publish", requireAuth(), publishAPage);
+
+
+router.post('/page/update-content', requireAuth(), updatePageContent);
+
+
+
 
 
 export default router;

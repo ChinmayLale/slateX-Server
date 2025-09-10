@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiError";
 import { ApiResponse } from "../utils/apiResponse";
 import { logger, errorLogger } from "../config/logger";
 import { clerkClient, getAuth } from '@clerk/express';
-import { addCoverImageToPage, addPageInDocument, getPageByPageId, publishPageByPageId, updateTitleForPage } from "../services/Pages.service";
+import { addCoverImageToPage, addPageInDocument, getPageByPageId, publishPageByPageId, updatePageContentByPageId, updateTitleForPage } from "../services/Pages.service";
 import { getDocumentById } from "../services/Document.service";
 
 
@@ -136,12 +136,38 @@ export const publishAPage = async (req: Request, res: Response) => {
       if (!page) {
          return res.status(500).send(new ApiError(500, "Internal Server Error while publishing Page", "Failed to publish page"))
       }
-      const published = await publishPageByPageId(pageId , page);
+      const published = await publishPageByPageId(pageId, page);
       return res.status(200).send(new ApiResponse(200, "Page Published Successfully", page))
    } catch (error) {
       console.error(error);
       return res.status(500).send(new ApiError(500, "Internal Server Error While publishing Page")); // failed
    }
 };
+
+
+export const updatePageContent = async (req: Request, res: Response) => {
+   try {
+      const { userId } = getAuth(req)
+      const { pageId, pageContent } = req.body;
+      console.log("Update Page Content Request Recived ");
+      // console.log({pageContent, pageId});
+      if (!userId) {
+         return res.status(400).send(new ApiError(400, "Bad Request", "User id is required"))
+      }
+      // Use Clerk's JavaScript Backend SDK to get the user's User object
+      const page = await getPageByPageId(pageId);
+      if (!page) {
+         return res.status(500).send(new ApiError(500, "Internal Server Error while updating Page", "Failed to update page"))
+      }
+      const updatedPage = await updatePageContentByPageId(pageId, pageContent);
+      if (!updatedPage) {
+         return res.status(500).send(new ApiError(500, "Internal Server Error while updating Page", "Failed to update page"))
+      }
+      return res.status(200).send(new ApiResponse(200, "Page Updated Successfully", updatedPage))
+   } catch (error) {
+      console.error(error);
+      return res.status(500).send(new ApiError(500, "Internal Server Error While updating Page")); // failed
+   }
+}
 
 export { addPageToDocumentController, createNewPage, updatePageTitleController }
