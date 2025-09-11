@@ -26,7 +26,8 @@ router.delete("/permanent", DeleteDocumentPermenently);
 
 router.post("/page/update-title",  updatePageTitleController);
 
-router.post('/page/update-cover-image',  updateCoverImageForPage);
+router.post('/page/updateCoverImage',  updateCoverImageForPage);
+// /documents/page/updateCoverImage
 
 
 router.post("/page/publish",  publishAPage);
