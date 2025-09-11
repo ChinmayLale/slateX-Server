@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ArchiveDocument, createNewDocument, DeleteDocumentPermenently, getAllDocuments, getAllTrashDocuments, renameDocument, UndoArchiveDocument } from "../controllers/document.controller";
 import { requireAuth } from "@clerk/express";
-import { addPageToDocumentController, publishAPage, updateCoverImageForPage, updatePageContent, updatePageTitleController } from "../controllers/page.controller";
+import { addPageToDocumentController, getPageByIdController, publishAPage, updateCoverImageForPage, updatePageContent, updatePageTitleController } from "../controllers/page.controller";
 
 
 const router = Router();
@@ -35,7 +35,7 @@ router.post("/page/publish",  publishAPage);
 router.post('/page/update-content',  updatePageContent);
 
 
-
+router.get('/getPage',getPageByIdController);
 
 
 export default router;

@@ -156,4 +156,23 @@ export const updatePageContent = async (req: Request, res: Response) => {
    }
 }
 
+
+
+
+export const getPageByIdController = async (req: Request, res: Response) => {
+   try {
+      // const { userId } = getAuth(req)
+      const { pageId } = req.query;
+
+      const page = await getPageByPageId(pageId as string);
+      if (!page) {
+         return res.status(500).send(new ApiError(500, "Internal Server Error while fetching Page", "Failed to fetch page"))
+      }
+      return res.status(200).send(new ApiResponse(200, "Page Fetched Successfully", page))
+   } catch (error) {
+      console.error(error);
+      return res.status(500).send(new ApiError(500, "Internal Server Error While fetching Page")); // failed
+   }
+}
+
 export { addPageToDocumentController, createNewPage, updatePageTitleController }
